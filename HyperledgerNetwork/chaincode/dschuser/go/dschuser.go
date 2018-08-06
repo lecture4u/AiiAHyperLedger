@@ -195,35 +195,95 @@ func (s *SmartContract) buyingAsset(APIstub shim.ChaincodeStubInterface, args []
 
 	json.Unmarshal(assetAsBytes, &userAsset)
 
+	userMoney := strconv.Atoi(userAsset.HasMoney)
+
 	assetName := args[1]
-
-	userAsset.HasMoney = args[3]
-
-	carAsBytes, _ = json.Marshal(car)
-	APIstub.PutState(args[0], carAsBytes)
-
-	return shim.Success(nil)
-
-	if len(args) != 2 {
-		return shim.Error("Incorrect number of arguments. Expecting 2")
+	switch {
+	case assetName == "Vegetable":
+		assetVegetable := strconv.Atoi(userAsset.HasVegetable)
+		assetVegetable := assetVegetable + strconv.Atoi(args[2])
+		userAsset.HasVegetable = strconv.Itoa(assetVegetable)
+	case assetName == "Mineral":
+		assetMineral := strconv.Atoi(userAsset.HasMineral)
+		assetMineral := assetMineral + strconv.Atoi(args[2])
+		userAsset.HasMineral = strconv.Itoa(assetMineral)
+	case assetName == "Meat":
+		assetMeat := strconv.Atoi(userAsset.HasMeat)
+		assetMeat := assetMeat + strconv.Atoi(args[2])
+		userAsset.HasMeat = strconv.Itoa(assetMeat)
+	case assetName == "Grain":
+		assetGrain := strconv.Atoi(userAsset.HasGrain)
+		assetGrain := assetGrain + strconv.Atoi(args[2])
+		userAsset.HasGrain = strconv.Itoa(assetGrain)
+	case assetName == "Fruit":
+		assetFruit := strconv.Atoi(userAsset.HasFruit)
+		assetFruit := assetFruit + strconv.Atoi(args[2])
+		userAsset.HasFruit = strconv.Itoa(assetFruit)
+	default:
+		panic("unrecognized asset name")
 	}
 
-	battingAsBytes, _ := APIstub.GetState(args[0]) //args[0] : key
-	var updateJsonBytes = []byte(args[1])
+	if userMoney, err := userMoney - strconv.Atoi(args[3]); err != nil {
+		panic(err)
+	}
+	userAsset.HasMoney = strconv.Itoa(userMoney)
 
-	batting := HorseRacingBatting{}
-
-	json.Unmarshal(battingAsBytes, &batting)
-	json.Unmarshal(updateJsonBytes, &batting) //변경된 내용만 반영, args[1] : updateJsonStr
-	//	batting.Voter = args[1]
-	//	batting.RacingTime = args[2]
-	//	batting.HorseName = args[3]
-	//	batting.Cost = args[4]
-
-	battingAsBytes, _ = json.Marshal(batting)
-	APIstub.PutState(args[0], battingAsBytes)
+	assetAsBytes, _ = json.Marshal(userAsset)
+	APIstub.PutState(args[0], assetAsBytes)
 
 	return shim.Success(nil)
+
+}
+
+func (s *SmartContract) sellingAsset(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
+
+	if len(args) != 3 { //[0] -> Key, [1] -> AssetName, [2]->Asset Quantity, [3]->Money
+		return shim.Error("Incorrect number of arguments. Expecting 3")
+	}
+
+	assetAsBytes, _ := APIstub.GetState(args[0])
+	userAsset := UserAsset{}
+
+	json.Unmarshal(assetAsBytes, &userAsset)
+
+	userMoney := strconv.Atoi(userAsset.HasMoney)
+
+	assetName := args[1]
+	switch {
+	case assetName == "Vegetable":
+		assetVegetable := strconv.Atoi(userAsset.HasVegetable)
+		assetVegetable := assetVegetable - strconv.Atoi(args[2])
+		userAsset.HasVegetable = strconv.Itoa(assetVegetable)
+	case assetName == "Mineral":
+		assetMineral := strconv.Atoi(userAsset.HasMineral)
+		assetMineral := assetMineral - strconv.Atoi(args[2])
+		userAsset.HasMineral = strconv.Itoa(assetMineral)
+	case assetName == "Meat":
+		assetMeat := strconv.Atoi(userAsset.HasMeat)
+		assetMeat := assetMeat - strconv.Atoi(args[2])
+		userAsset.HasMeat = strconv.Itoa(assetMeat)
+	case assetName == "Grain":
+		assetGrain := strconv.Atoi(userAsset.HasGrain)
+		assetGrain := assetGrain - strconv.Atoi(args[2])
+		userAsset.HasGrain = strconv.Itoa(assetGrain)
+	case assetName == "Fruit":
+		assetFruit := strconv.Atoi(userAsset.HasFruit)
+		assetFruit := assetFruit - strconv.Atoi(args[2])
+		userAsset.HasFruit = strconv.Itoa(assetFruit)
+	default:
+		panic("unrecognized asset name")
+	}
+
+	if userMoney, err := userMoney + strconv.Atoi(args[3]); err != nil {
+		panic(err)
+	}
+	userAsset.HasMoney = strconv.Itoa(userMoney)
+
+	assetAsBytes, _ = json.Marshal(userAsset)
+	APIstub.PutState(args[0], assetAsBytes)
+
+	return shim.Success(nil)
+
 }
 
 // The main function is only relevant in unit test mode. Only included here for completeness.
