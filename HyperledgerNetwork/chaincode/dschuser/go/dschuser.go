@@ -32,6 +32,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"os"
 	"strconv"
 
 	"github.com/hyperledger/fabric/core/chaincode/shim"
@@ -77,7 +78,7 @@ func (s *SmartContract) Invoke(APIstub shim.ChaincodeStubInterface) sc.Response 
 	} else if function == "queryAssetWithKey" {
 		return s.queryAssetWithKey(APIstub, args)
 	} else if function == "queryAllUserList" {
-		return s.queryAllUserList(APIstub, args)
+		return s.queryAllUserList(APIstub)
 	} else if function == "buyingAsset" {
 		return s.buyingAsset(APIstub, args)
 	} else if function == "sellingAsset" {
@@ -186,8 +187,8 @@ func (s *SmartContract) registUserAsset(APIstub shim.ChaincodeStubInterface, arg
 
 func (s *SmartContract) buyingAsset(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
 
-	if len(args) != 3 { //[0] -> Key, [1] -> AssetName, [2]->Asset Quantity, [3]->Money
-		return shim.Error("Incorrect number of arguments. Expecting 3")
+	if len(args) != 4 { //[0] -> Key, [1] -> AssetName, [2]->Asset Quantity, [3]->Money
+		return shim.Error("Incorrect number of arguments. Expecting 4")
 	}
 
 	assetAsBytes, _ := APIstub.GetState(args[0])
@@ -195,37 +196,63 @@ func (s *SmartContract) buyingAsset(APIstub shim.ChaincodeStubInterface, args []
 
 	json.Unmarshal(assetAsBytes, &userAsset)
 
-	userMoney := strconv.Atoi(userAsset.HasMoney)
-
+	userMoney, err := strconv.Atoi(userAsset.HasMoney)
+	checkError(err)
 	assetName := args[1]
 	switch {
 	case assetName == "Vegetable":
-		assetVegetable := strconv.Atoi(userAsset.HasVegetable)
-		assetVegetable := assetVegetable + strconv.Atoi(args[2])
+		assetVegetable, err := strconv.Atoi(userAsset.HasVegetable)
+		checkError(err)
+		assetVegeArg, err := strconv.Atoi(args[2])
+		checkError(err)
+
+		assetVegetable = assetVegetable + assetVegeArg
 		userAsset.HasVegetable = strconv.Itoa(assetVegetable)
+
 	case assetName == "Mineral":
-		assetMineral := strconv.Atoi(userAsset.HasMineral)
-		assetMineral := assetMineral + strconv.Atoi(args[2])
+		assetMineral, err := strconv.Atoi(userAsset.HasMineral)
+		checkError(err)
+		assetMineralArg, err := strconv.Atoi(args[2])
+		checkError(err)
+		assetMineral = assetMineral + assetMineralArg
+
 		userAsset.HasMineral = strconv.Itoa(assetMineral)
+
 	case assetName == "Meat":
-		assetMeat := strconv.Atoi(userAsset.HasMeat)
-		assetMeat := assetMeat + strconv.Atoi(args[2])
+		assetMeat, err := strconv.Atoi(userAsset.HasMeat)
+		checkError(err)
+		assetMeatArg, err := strconv.Atoi(args[2])
+		checkError(err)
+
+		assetMeat = assetMeat + assetMeatArg
 		userAsset.HasMeat = strconv.Itoa(assetMeat)
+
 	case assetName == "Grain":
-		assetGrain := strconv.Atoi(userAsset.HasGrain)
-		assetGrain := assetGrain + strconv.Atoi(args[2])
+		assetGrain, err := strconv.Atoi(userAsset.HasGrain)
+		checkError(err)
+		assetGrainArg, err := strconv.Atoi(args[2])
+		checkError(err)
+
+		assetGrain = assetGrain + assetGrainArg
 		userAsset.HasGrain = strconv.Itoa(assetGrain)
+
 	case assetName == "Fruit":
-		assetFruit := strconv.Atoi(userAsset.HasFruit)
-		assetFruit := assetFruit + strconv.Atoi(args[2])
+		assetFruit, err := strconv.Atoi(userAsset.HasFruit)
+		checkError(err)
+		assetFruitArg, err := strconv.Atoi(args[2])
+		checkError(err)
+
+		assetFruit = assetFruit + assetFruitArg
 		userAsset.HasFruit = strconv.Itoa(assetFruit)
+
 	default:
 		panic("unrecognized asset name")
 	}
+	userMoneyArg, err := strconv.Atoi(args[3])
+	checkError(err)
 
-	if userMoney, err := userMoney - strconv.Atoi(args[3]); err != nil {
-		panic(err)
-	}
+	userMoney = userMoney - userMoneyArg
+
 	userAsset.HasMoney = strconv.Itoa(userMoney)
 
 	assetAsBytes, _ = json.Marshal(userAsset)
@@ -237,8 +264,8 @@ func (s *SmartContract) buyingAsset(APIstub shim.ChaincodeStubInterface, args []
 
 func (s *SmartContract) sellingAsset(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
 
-	if len(args) != 3 { //[0] -> Key, [1] -> AssetName, [2]->Asset Quantity, [3]->Money
-		return shim.Error("Incorrect number of arguments. Expecting 3")
+	if len(args) != 4 { //[0] -> Key, [1] -> AssetName, [2]->Asset Quantity, [3]->Money
+		return shim.Error("Incorrect number of arguments. Expecting 4")
 	}
 
 	assetAsBytes, _ := APIstub.GetState(args[0])
@@ -246,37 +273,62 @@ func (s *SmartContract) sellingAsset(APIstub shim.ChaincodeStubInterface, args [
 
 	json.Unmarshal(assetAsBytes, &userAsset)
 
-	userMoney := strconv.Atoi(userAsset.HasMoney)
-
+	userMoney, err := strconv.Atoi(userAsset.HasMoney)
+	checkError(err)
 	assetName := args[1]
 	switch {
 	case assetName == "Vegetable":
-		assetVegetable := strconv.Atoi(userAsset.HasVegetable)
-		assetVegetable := assetVegetable - strconv.Atoi(args[2])
+		assetVegetable, err := strconv.Atoi(userAsset.HasVegetable)
+		checkError(err)
+		assetVegeArg, err := strconv.Atoi(args[2])
+		checkError(err)
+
+		assetVegetable = assetVegetable - assetVegeArg
 		userAsset.HasVegetable = strconv.Itoa(assetVegetable)
+
 	case assetName == "Mineral":
-		assetMineral := strconv.Atoi(userAsset.HasMineral)
-		assetMineral := assetMineral - strconv.Atoi(args[2])
+		assetMineral, err := strconv.Atoi(userAsset.HasMineral)
+		checkError(err)
+		assetMineralArg, err := strconv.Atoi(args[2])
+		checkError(err)
+		assetMineral = assetMineral - assetMineralArg
+
 		userAsset.HasMineral = strconv.Itoa(assetMineral)
+
 	case assetName == "Meat":
-		assetMeat := strconv.Atoi(userAsset.HasMeat)
-		assetMeat := assetMeat - strconv.Atoi(args[2])
+		assetMeat, err := strconv.Atoi(userAsset.HasMeat)
+		checkError(err)
+		assetMeatArg, err := strconv.Atoi(args[2])
+		checkError(err)
+
+		assetMeat = assetMeat - assetMeatArg
 		userAsset.HasMeat = strconv.Itoa(assetMeat)
+
 	case assetName == "Grain":
-		assetGrain := strconv.Atoi(userAsset.HasGrain)
-		assetGrain := assetGrain - strconv.Atoi(args[2])
+		assetGrain, err := strconv.Atoi(userAsset.HasGrain)
+		checkError(err)
+		assetGrainArg, err := strconv.Atoi(args[2])
+		checkError(err)
+
+		assetGrain = assetGrain - assetGrainArg
 		userAsset.HasGrain = strconv.Itoa(assetGrain)
+
 	case assetName == "Fruit":
-		assetFruit := strconv.Atoi(userAsset.HasFruit)
-		assetFruit := assetFruit - strconv.Atoi(args[2])
+		assetFruit, err := strconv.Atoi(userAsset.HasFruit)
+		checkError(err)
+		assetFruitArg, err := strconv.Atoi(args[2])
+		checkError(err)
+
+		assetFruit = assetFruit - assetFruitArg
 		userAsset.HasFruit = strconv.Itoa(assetFruit)
+
 	default:
 		panic("unrecognized asset name")
 	}
+	userMoneyArg, err := strconv.Atoi(args[3])
+	checkError(err)
+	userMoney = userMoney + userMoneyArg
 
-	if userMoney, err := userMoney + strconv.Atoi(args[3]); err != nil {
-		panic(err)
-	}
 	userAsset.HasMoney = strconv.Itoa(userMoney)
 
 	assetAsBytes, _ = json.Marshal(userAsset)
@@ -293,6 +345,12 @@ func main() {
 	err := shim.Start(new(SmartContract))
 	if err != nil {
 		fmt.Printf("Error creating new Smart Contract: %s", err)
+	}
+}
+func checkError(err error) {
+	if err != nil {
+		fmt.Println("Fatal Error", err.Error())
+		os.Exit(1)
 	}
 }
 
