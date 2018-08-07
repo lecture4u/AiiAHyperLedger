@@ -41,8 +41,8 @@
                                 <content>
                                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                        <children>
-                                          <Label layoutX="72.0" layoutY="22.0" text="User List" />
-                                          <TableView fx:id="userListTableView" layoutX="5.0" layoutY="42.0" prefHeight="470.0" prefWidth="190.0">
+                                          <Label layoutX="149.0" layoutY="22.0" text="User List" />
+                                          <TableView fx:id="userListTableView" layoutX="83.0" layoutY="43.0" prefHeight="470.0" prefWidth="190.0">
                                             <columns>
                                               <TableColumn fx:id="userIDColumn" prefWidth="189.0" text="User ID" />
                                             </columns>
@@ -60,6 +60,7 @@
                                           <TextField fx:id="assetQuantityfield" layoutX="385.0" layoutY="524.0" />
                                           <Button layoutX="603.0" layoutY="524.0" mnemonicParsing="false" onAction="#buyingAsset" text="Buying" />
                                           <Button layoutX="673.0" layoutY="524.0" mnemonicParsing="false" onAction="#sellingAsset" text="Selling" />
+                                          <Button layoutX="15.0" layoutY="9.0" mnemonicParsing="false" onAction="#queryParticipants" text="Refresh" />
                                        </children>
                                     </AnchorPane>
                                 </content>

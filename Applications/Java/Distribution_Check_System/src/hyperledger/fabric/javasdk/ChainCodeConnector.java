@@ -31,7 +31,7 @@ public class ChainCodeConnector {
 			e.printStackTrace();
 		}
     }
-	public void setChInfo(String channelName, String ordererURL, String ordererDomain) {
+	public void setChInfo(String channelName, String ordererDomain, String ordererURL) {
 		this.channelName = channelName;
 		this.ordererDomain = ordererDomain;
 		this.ordererURL = ordererURL;
@@ -83,7 +83,7 @@ public class ChainCodeConnector {
 		channel.initialize();
 		return channel;
 	}
-	public String queryBlockChain(String channelName, String chaincodeName, String functionName, String[] args)
+	public String queryBlockChain(String channelName, String chaincodeName, String functionName)
 			throws ProposalException, InvalidArgumentException {
 		String stringResponse="";
 		// get channel instance from client
@@ -95,7 +95,7 @@ public class ChainCodeConnector {
 		qpr.setChaincodeID(fabcarCCId);
 		// CC function to be called
 		qpr.setFcn(functionName);
-		qpr.setArgs(args);
+		//qpr.setArgs(args);
 		Collection<ProposalResponse> res = channel.queryByChaincode(qpr);
 		// display response
 		for (ProposalResponse pres : res) {

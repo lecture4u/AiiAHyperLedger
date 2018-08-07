@@ -29,7 +29,7 @@ public class CAConnector {
 	public CAConnector() {
 
 	}
-	public void issuAdmin(String adminID, String adminPW, String adminOrg) {
+	public void issueAdmin(String adminID, String adminPW, String adminOrg) {
 		try {
 			admin = getAdmin(caClient,adminID,adminPW, adminOrg);
 		} catch (Exception e) {
@@ -54,7 +54,9 @@ public class CAConnector {
 	private AppUser getAdmin(HFCAClient caClient, String adminID, String adminPW, String org) throws Exception {
 		AppUser admin = tryDeserialize(adminID);
 		String lowerOrg = org.toLowerCase();
+		System.out.println("Admin Lower org:"+lowerOrg);
 		String orgMSP = org+"MSP";
+		System.out.println("Admin org MSP:"+orgMSP);
 		if (admin == null) {
 			Enrollment adminEnrollment = caClient.enroll(adminID, adminPW);
 			admin = new AppUser(adminID, lowerOrg, orgMSP, adminEnrollment);
@@ -65,7 +67,9 @@ public class CAConnector {
 	private AppUser getUser(HFCAClient caClient, AppUser registrar, String userId, String org) throws Exception {
 		AppUser appUser = tryDeserialize(userId);
 		String lowerOrg = org.toLowerCase();
+		System.out.println("User Lower org:"+lowerOrg);
 		String orgMSP = org+"MSP";
+		System.out.println("User org MSP:"+orgMSP);
 		if (appUser == null) {
 			RegistrationRequest rr = new RegistrationRequest(userId, lowerOrg);
 			String enrollmentSecret = caClient.register(rr, registrar);

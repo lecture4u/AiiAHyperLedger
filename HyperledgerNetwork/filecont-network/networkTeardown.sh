@@ -13,6 +13,6 @@ docker rm -f $(docker ps -aq)
 docker network prune
 
 # remove chaincode docker images
-docker rmi $(docker images *dsch* -q)
+docker rmi $(docker images *filecont* -q)
 
 echo  "Your Blockchain network is now clean"
