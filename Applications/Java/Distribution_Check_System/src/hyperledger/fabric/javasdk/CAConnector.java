@@ -41,7 +41,7 @@ public class CAConnector {
 		try {
 			user = getUser(caClient,admin,userID, userOrg);
 		} catch (Exception e) {
-			System.out.println("admin account issue failed");
+			System.out.println("user registance failed");
 			e.printStackTrace();
 		}
 	}

@@ -22,4 +22,5 @@ public class AssetInfo {
    public void setAssetValue(StringProperty assetValue) {
 	   this.assetValue = assetValue;
    }
+  
 }

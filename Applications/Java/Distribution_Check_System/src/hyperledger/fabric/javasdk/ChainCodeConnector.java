@@ -1,7 +1,11 @@
 package hyperledger.fabric.javasdk;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
+import org.hyperledger.fabric.sdk.BlockEvent;
 import org.hyperledger.fabric.sdk.ChaincodeID;
 import org.hyperledger.fabric.sdk.Channel;
 import org.hyperledger.fabric.sdk.EventHub;
@@ -10,6 +14,7 @@ import org.hyperledger.fabric.sdk.Orderer;
 import org.hyperledger.fabric.sdk.Peer;
 import org.hyperledger.fabric.sdk.ProposalResponse;
 import org.hyperledger.fabric.sdk.QueryByChaincodeRequest;
+import org.hyperledger.fabric.sdk.TransactionProposalRequest;
 import org.hyperledger.fabric.sdk.exception.InvalidArgumentException;
 import org.hyperledger.fabric.sdk.exception.ProposalException;
 import org.hyperledger.fabric.sdk.exception.TransactionException;
@@ -83,7 +88,7 @@ public class ChainCodeConnector {
 		channel.initialize();
 		return channel;
 	}
-	public String queryBlockChain(String channelName, String chaincodeName, String functionName)
+	public String queryBlockChain(String chaincodeName, String functionName)
 			throws ProposalException, InvalidArgumentException {
 		String stringResponse="";
 		// get channel instance from client
@@ -104,5 +109,55 @@ public class ChainCodeConnector {
 			// log.info(stringResponse);
 		}
 		return stringResponse;
+	}
+	public String hasVariablequeryBlockChain(String chaincodeName, String functionName, String[] variable)
+			throws ProposalException, InvalidArgumentException {
+		String stringResponse="";
+		// get channel instance from client
+		Channel channel = client.getChannel(channelName);
+		// create chaincode request
+		QueryByChaincodeRequest qpr = client.newQueryProposalRequest();
+		// build cc id providing the chaincode name. Version is omitted here.
+		ChaincodeID fabcarCCId = ChaincodeID.newBuilder().setName(chaincodeName).build();
+		qpr.setChaincodeID(fabcarCCId);
+		// CC function to be called
+		qpr.setFcn(functionName);
+		qpr.setArgs(variable);
+		Collection<ProposalResponse> res = channel.queryByChaincode(qpr);
+		// display response
+		for (ProposalResponse pres : res) {
+			stringResponse = new String(pres.getChaincodeActionResponsePayload());
+			System.out.println(stringResponse);
+			// log.info(stringResponse);
+		}
+		return stringResponse;
+	}
+	public CompletableFuture<BlockEvent.TransactionEvent> invokeBlockChain(String chaincodeName,
+			String functionName, String[] args) throws ProposalException, InvalidArgumentException {
+		// get channel instance from client
+		Channel channel = client.getChannel(channelName);
+
+		// create chaincode request
+		TransactionProposalRequest Request = client.newTransactionProposalRequest();
+
+		// build cc id providing the chaincode name. Version is omitted here.
+		ChaincodeID CCId = ChaincodeID.newBuilder().setName(chaincodeName).build();
+		Request.setChaincodeID(CCId);
+
+		// CC function to be called
+		Request.setFcn(functionName);
+		Request.setArgs(args);
+
+		Collection<ProposalResponse> responses = channel.sendTransactionProposal(Request);
+		List<ProposalResponse> invalid = responses.stream().filter(r -> r.isInvalid()).collect(Collectors.toList());
+		if (!invalid.isEmpty()) {
+			invalid.forEach(response -> {
+				System.out.println(response.getMessage());
+			});
+			throw new RuntimeException("invalid response(s) found");
+		}
+
+		return channel.sendTransaction(responses);
+
 	}
 }

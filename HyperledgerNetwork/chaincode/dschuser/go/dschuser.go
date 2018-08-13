@@ -83,6 +83,8 @@ func (s *SmartContract) Invoke(APIstub shim.ChaincodeStubInterface) sc.Response 
 		return s.buyingAsset(APIstub, args)
 	} else if function == "sellingAsset" {
 		return s.sellingAsset(APIstub, args)
+	} else if function == "userInfoHistory" {
+		return s.userInfoHistory(APIstub, args)
 	}
 
 	return shim.Error("Invalid Smart Contract function name.")
@@ -173,8 +175,8 @@ func (s *SmartContract) initLedger(APIstub shim.ChaincodeStubInterface) sc.Respo
 
 func (s *SmartContract) registUserAsset(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
 
-	if len(args) != 7 {
-		return shim.Error("Incorrect number of arguments. Expecting 7")
+	if len(args) != 8 {
+		return shim.Error("Incorrect number of arguments. Expecting 8")
 	}
 
 	var asset = UserAsset{UserName: args[1], HasMoney: args[2], HasVegetable: args[3], HasMineral: args[4], HasMeat: args[5], HasGrain: args[6], HasFruit: args[7]}
@@ -336,6 +338,32 @@ func (s *SmartContract) sellingAsset(APIstub shim.ChaincodeStubInterface, args [
 
 	return shim.Success(nil)
 
+}
+func (s *SmartContract) userInfoHistory(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
+	key := args[0]
+	keysIter, err := APIstub.GetHistoryForKey(key)
+
+	if err != nil {
+		return shim.Error(fmt.Sprintf("Query operation failed. Error accessing state: %s", err))
+	}
+	defer keysIter.Close()
+	var keys []string
+	for keysIter.HasNext() {
+		response, iterErr := keysIter.Next()
+		if iterErr != nil {
+			return shim.Error(fmt.Sprintf("Query operation failed. Error accessing state: %s", err))
+		}
+		keys = append(keys, response.TxId, string(response.Value))
+	}
+
+	for key, txID := range keys {
+		fmt.Printf("key %d contains %s\n", key, txID)
+	}
+	jsonKeys, err := json.Marshal(keys)
+	if err != nil {
+		return shim.Error(fmt.Sprintf("Query operation faild. Error marshaling JSON: %s", err))
+	}
+	return shim.Success(jsonKeys)
 }
 
 // The main function is only relevant in unit test mode. Only included here for completeness.
