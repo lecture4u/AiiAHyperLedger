@@ -49,6 +49,7 @@ services:
     command: sh -c 'fabric-ca-server start -b admin3:adminpw3 -d'
     volumes:
       - ./crypto-config/peerOrganizations/org3.dsch.com/ca/:/etc/hyperledger/fabric-ca-server-config
+      - ./caorg3config/:/etc/hyperledger/fabric-ca-server
     container_name: ca.org3.dsch.com
     networks:
       - basic
