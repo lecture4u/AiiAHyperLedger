@@ -26,7 +26,6 @@ Profiles:
             Organizations:
                 - *Org3
                 - *Org4
-                   
 
 Organizations:
 

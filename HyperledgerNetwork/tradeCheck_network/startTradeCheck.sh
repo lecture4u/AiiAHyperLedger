@@ -21,8 +21,8 @@ sleep ${FABRIC_START_TIMEOUT}
 # Create the trpwchannelchannel
 docker exec cli peer channel create -o orderer.trch.com:7050 -c trpwchannel -f ./config/trpwchannel.tx
 
-# Create the trpwchannelchannel
-docker exec -e "CORE_PEER_LOCALMSPID=Org3MSP" -e "CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org3.trch.com/users/Admin@org3.trch.com/msp" -e "CORE_PEER_ADDRESS=peer0.org3.trch.com:7051" cli peer channel create -o orderer.trch.com:7050 -c trcrchannel -f ./config/trcrchannel.tx
+# Create the trcrchannelchannel
+docker exec -e "CORE_PEER_LOCALMSPID=Org4MSP" -e "CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org4.trch.com/users/Admin@org4.trch.com/msp" -e "CORE_PEER_ADDRESS=peer0.org4.trch.com:7051" cli peer channel create -o orderer.trch.com:7050 -c trcrchannel -f ./config/trcrchannel.tx
 
 # Join peer0.org1 to the channel.
 docker exec cli peer channel join -b trpwchannel.block
