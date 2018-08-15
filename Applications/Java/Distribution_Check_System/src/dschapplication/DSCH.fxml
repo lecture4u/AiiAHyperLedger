@@ -43,39 +43,39 @@
                                     </AnchorPane>
                                 </content>
                               </TitledPane>
-                              <TitledPane animated="false" layoutX="14.0" layoutY="162.0" prefHeight="593.0" prefWidth="775.0" text="Distribution Participants status ( 1Box == 100Ind)">
+                              <TitledPane animated="false" layoutX="14.0" layoutY="162.0" prefHeight="593.0" prefWidth="633.0" text="Distribution Participants status ( 1Box == 100Ind)">
                                 <content>
                                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                        <children>
-                                          <Label layoutX="149.0" layoutY="22.0" text="User List" />
-                                          <TableView fx:id="userListTableView" layoutX="83.0" layoutY="43.0" prefHeight="470.0" prefWidth="190.0">
+                                          <Label layoutX="84.0" layoutY="67.0" text="User List" />
+                                          <TableView fx:id="userListTableView" layoutX="17.0" layoutY="90.0" prefHeight="423.0" prefWidth="190.0">
                                             <columns>
                                               <TableColumn fx:id="userIDColumn" prefWidth="189.0" text="User ID" />
                                             </columns>
                                           </TableView>
-                                          <TableView fx:id="userAssetStatusTableView" layoutX="411.0" layoutY="42.0" prefHeight="471.0" prefWidth="324.0">
+                                          <TableView fx:id="userAssetStatusTableView" layoutX="270.0" layoutY="88.0" prefHeight="428.0" prefWidth="324.0">
                                             <columns>
                                               <TableColumn fx:id="userInfoNameColumn" prefWidth="162.0" text="Name" />
                                               <TableColumn fx:id="userInfoValueColumn" prefWidth="161.0" text="Value" />
                                             </columns>
                                           </TableView>
-                                          <Label layoutX="516.0" layoutY="22.0" text="User Asset Status" />
+                                          <Label layoutX="375.0" layoutY="67.0" text="User Asset Status" />
                                           <Label layoutX="5.0" layoutY="529.0" text="Asset Name: " />
-                                          <Label layoutX="304.0" layoutY="529.0" text="Asset Quantity:" />
-                                          <TextField fx:id="assetNamefield" layoutX="92.0" layoutY="524.0" />
-                                          <TextField fx:id="assetQuantityfield" layoutX="411.0" layoutY="524.0" />
-                                          <Button layoutX="603.0" layoutY="524.0" mnemonicParsing="false" onAction="#buyingAsset" text="Buying" />
-                                          <Button layoutX="673.0" layoutY="524.0" mnemonicParsing="false" onAction="#sellingAsset" text="Selling" />
-                                          <Button layoutX="15.0" layoutY="9.0" mnemonicParsing="false" onAction="#queryParticipants" text="Refresh" />
-                                          <Label layoutX="692.0" layoutY="550.0" text="ind" />
-                                          <Label layoutX="624.0" layoutY="550.0" text="ind" />
+                                          <Label layoutX="270.0" layoutY="529.0" text="Asset Quantity:" />
+                                          <TextField fx:id="assetNamefield" layoutX="92.0" layoutY="524.0" prefHeight="26.0" prefWidth="115.0" />
+                                          <TextField fx:id="assetQuantityfield" layoutX="375.0" layoutY="524.0" prefHeight="26.0" prefWidth="95.0" />
+                                          <Button layoutX="481.0" layoutY="524.0" mnemonicParsing="false" onAction="#buyingAsset" text="Buying" />
+                                          <Button layoutX="553.0" layoutY="524.0" mnemonicParsing="false" onAction="#sellingAsset" text="Selling" />
+                                          <Button layoutX="15.0" layoutY="25.0" mnemonicParsing="false" onAction="#queryParticipants" text="Refresh" />
+                                          <Label layoutX="572.0" layoutY="550.0" text="Box" />
+                                          <Label layoutX="502.0" layoutY="550.0" text="ind" />
                                        </children>
                                     </AnchorPane>
                                 </content>
                               </TitledPane>
-                              <TitledPane animated="false" layoutX="803.0" layoutY="162.0" prefHeight="590.0" prefWidth="179.0" text="Regist new User">
+                              <TitledPane animated="false" layoutX="657.0" layoutY="162.0" prefHeight="590.0" prefWidth="325.0" text="Regist new User">
                                 <content>
-                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="563.0" prefWidth="222.0">
                                        <children>
                                           <Button layoutX="109.0" layoutY="523.0" mnemonicParsing="false" onAction="#insertNewUserAccount" text="Create" />
                                           <Label layoutX="14.0" layoutY="14.0" text="User ID" />
@@ -94,6 +94,16 @@
                                           <Label layoutX="16.0" layoutY="319.0" text="InitMeat" />
                                           <Label layoutX="16.0" layoutY="379.0" text="InitGrain" />
                                           <Label layoutX="20.0" layoutY="436.0" text="InitFruit" />
+                                          <Label layoutX="179.0" layoutY="198.0" text="InitBoxVegetable" />
+                                          <Label layoutX="179.0" layoutY="255.0" text="InitBoxMineral" />
+                                          <Label layoutX="179.0" layoutY="319.0" text="InitBoxMeat" />
+                                          <Label layoutX="178.0" layoutY="379.0" text="InitBoxGrain" />
+                                          <Label layoutX="180.0" layoutY="436.0" text="InitBoxFruit" />
+                                          <TextField fx:id="initBoxVegetablefield" layoutX="179.0" layoutY="221.0" prefHeight="26.0" prefWidth="138.0" />
+                                          <TextField fx:id="initBoxMineralfield" layoutX="180.0" layoutY="282.0" prefHeight="26.0" prefWidth="135.0" />
+                                          <TextField fx:id="initBoxMeatfield" layoutX="180.0" layoutY="344.0" prefHeight="26.0" prefWidth="134.0" />
+                                          <TextField fx:id="initBoxGrainfield" layoutX="180.0" layoutY="402.0" prefHeight="26.0" prefWidth="134.0" />
+                                          <TextField fx:id="initBoxFruitfield" layoutX="180.0" layoutY="459.0" prefHeight="26.0" prefWidth="134.0" />
                                        </children>
                                     </AnchorPane>
                                 </content>

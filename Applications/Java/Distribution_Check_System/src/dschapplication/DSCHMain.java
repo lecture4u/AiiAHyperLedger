@@ -26,7 +26,7 @@ public class DSCHMain extends Application {
 			Scene scene = new Scene(root);
 			primaryStage.setScene(scene);
 			primaryStage.show();
-			primaryStage.setTitle("Hyperledger Blockchain File Contrast Read Application");
+			primaryStage.setTitle("Hyperledger Blockchain Distribution Check Application");
 			DSCHController controller = loader.getController();
 		
 			controller.setStage(primaryStage);

@@ -62,6 +62,12 @@ public class DSCHController implements Initializable{
 	@FXML TextField initMeatfield;
 	@FXML TextField initGrainfield;
 	@FXML TextField initFruitfield;
+	
+	@FXML TextField initBoxVegetablefield;
+	@FXML TextField initBoxMineralfield;
+	@FXML TextField initBoxMeatfield;
+	@FXML TextField initBoxGrainfield;
+	@FXML TextField initBoxFruitfield;
 	/*-------User Tab - Distribution Participants status components----------------*/
 	@FXML TextField assetNamefield;
 	@FXML TextField assetQuantityfield;
@@ -228,7 +234,7 @@ public class DSCHController implements Initializable{
         String currentUserMoney = currentAssetInfo.get(1).getAssetValue().get();
       
        for(int i=0; i<currentAssetInfo.size(); i++) {
-        	if(currentAssetInfo.get(i).getAssetName().get().equals("has"+assetNamefield.getText())) {
+        	if(currentAssetInfo.get(i).getAssetName().get().equals("box"+assetNamefield.getText())) {
         		
         		currentUserAsset =  currentAssetInfo.get(i).getAssetValue().get();
         	}
@@ -236,14 +242,12 @@ public class DSCHController implements Initializable{
        dealTransaction = "Selling User:"+currentUser+"'s Asset:"+assetNamefield.getText()+", "+currentUserAsset+"\n";
        dealTransaction = dealTransaction + "To wholeSale MarketPrice:"+wholeSaleMarketPrice+" ,Quantity:"+wholeSaleQuantity+"\n";
        
-     //  System.out.println("Selling User:"+currentUser+"'s Asset:"+assetNamefield.getText()+", "+currentUserAsset);    
-     //  System.out.println("To wholeSale MarketPrice:"+wholeSaleMarketPrice+" ,Quantity:"+wholeSaleQuantity);
        try {
            int userAssetQuantityInt = Integer.parseInt(currentUserAsset);
            int assetQuantityInt = Integer.parseInt(assetQuantityfield.getText());
            int resultUserAssetQuantityInt = userAssetQuantityInt - assetQuantityInt;
            //System.out.println("Then Result be User's Asset Quantity:"+currentUserAsset+"-"+assetQuantityfield.getText()+"="+resultUserAssetQuantityInt);
-           dealTransaction = dealTransaction +"Then Result be User's Asset Quantity:"+currentUserAsset+"-"+assetQuantityfield.getText()+"="+resultUserAssetQuantityInt+"\n";
+           dealTransaction = dealTransaction +"Then Result be User's Asset Box Quantity:"+currentUserAsset+"-"+assetQuantityfield.getText()+"="+resultUserAssetQuantityInt+"\n";
            
            int currentUserMoneyInt = Integer.parseInt(currentUserMoney);
            int wholeSaleMarketPriceInt = Integer.parseInt(wholeSaleMarketPrice);
@@ -262,23 +266,19 @@ public class DSCHController implements Initializable{
 			}
 			
            int wholeSaleAssetQuantityInt = Integer.parseInt(wholeSaleQuantity);
-           int wholesaleIncreaseAset = assetQuantityInt/100;
+           int wholesaleIncreaseAset = assetQuantityInt;
            resultUserAssetQuantityInt = wholeSaleAssetQuantityInt + wholesaleIncreaseAset;
           // System.out.println("               Wholesale's Asset Quantity:"+wholeSaleQuantity+"+"+assetQuantityfield.getText()+"/100="+resultUserAssetQuantityInt);
-           dealTransaction = dealTransaction +"               Wholesale's Asset Quantity:"+wholeSaleQuantity+"+"+assetQuantityfield.getText()+"/100="+resultUserAssetQuantityInt+"\n";
+           dealTransaction = dealTransaction +"               Wholesale's Asset Quantity:"+wholeSaleQuantity+"+"+assetQuantityfield.getText()+"="+resultUserAssetQuantityInt+"\n";
            event = org2ChainConnector.invokeBlockChain("dschwholesale","increaseQuantity",new String[] {assetNamefield.getText(),wholesaleIncreaseAset+""})
 					.get(1200, TimeUnit.SECONDS);
 			if (event.isValid()) {
-				//transactionLog = transactionLog+"Transaction  tx: " + event.getTransactionID() + "is completed.";
-				System.out.println("Transaction  tx: " + event.getTransactionID() + "is completed.");
 				dealTransaction = dealTransaction +"Transaction  tx: " + event.getTransactionID() + "is completed."+"\n";
-			//	transactionLog = transactionLog+"Transaction  timestamp: " + event.getTimestamp();
-				System.out.println("Transaction  timestamp: " + event.getTimestamp());
 				dealTransaction = dealTransaction +"Transaction  timestamp: " + event.getTimestamp()+"\n";
 			} else {
 			//	transactionLog = transactionLog+"Transaction  tx: " + event.getTransactionID() + "is invalid.";
 				dealTransaction = dealTransaction +"Transaction  tx: " + event.getTransactionID() + "is invalid."+"\n";
-				//transactionLog = transactionLog+"Transaction  timestamp: " + event.getTimestamp();
+				
 				dealTransaction = dealTransaction +"Transaction  timestamp: " + event.getTimestamp()+"\n";
 			
 			}
@@ -340,20 +340,11 @@ public class DSCHController implements Initializable{
            
            BlockEvent.TransactionEvent event = org1ChainConnector.invokeBlockChain("dschuser","buyingAsset",new String[] {currentUser, assetNamefield.getText(),assetQuantityfield.getText(),resultUserAssetQuantityInt+""})
 					.get(1200, TimeUnit.SECONDS);
-			if (event.isValid()) {
-				//transactionLog = transactionLog+"Transaction  tx: " + event.getTransactionID() + "is completed.";
-				System.out.println("Transaction  tx: " + event.getTransactionID() + "is completed.");
-				dealTransaction =dealTransaction + "Transaction  tx: " + event.getTransactionID() + "is completed.";
-		           
-			//	transactionLog = transactionLog+"Transaction  timestamp: " + event.getTimestamp();
-				System.out.println("Transaction  timestamp: " + event.getTimestamp());
+			if (event.isValid()) {		
+				dealTransaction =dealTransaction + "Transaction  tx: " + event.getTransactionID() + "is completed.";		        
 				dealTransaction =dealTransaction + "Transaction  timestamp: " + event.getTimestamp();
-			} else {
-			//	transactionLog = transactionLog+"Transaction  tx: " + event.getTransactionID() + "is invalid.";
-				System.out.println("Transaction  tx: " + event.getTransactionID() + "is invalid.");
-				dealTransaction =dealTransaction + "Transaction  tx: " + event.getTransactionID() + "is invalid.";
-				//transactionLog = transactionLog+"Transaction  timestamp: " + event.getTimestamp();
-				System.out.println("Transaction  timestamp: " + event.getTimestamp());
+			} else {			
+				dealTransaction =dealTransaction + "Transaction  tx: " + event.getTransactionID() + "is invalid.";				
 				dealTransaction =dealTransaction + "Transaction  timestamp: " + event.getTimestamp();
 			}
 			
@@ -364,19 +355,11 @@ public class DSCHController implements Initializable{
            dealTransaction =dealTransaction + "               Wholesale's Asset Quantity:"+retailQuantity+"-"+assetQuantityfield.getText()+"="+resultUserAssetQuantityInt;
           event = org3ChainConnector.invokeBlockChain("dschlocalesale","decreaseQuantity",new String[] {assetNamefield.getText(),assetQuantityfield.getText()})
 					.get(1200, TimeUnit.SECONDS);
-			if (event.isValid()) {
-				//transactionLog = transactionLog+"Transaction  tx: " + event.getTransactionID() + "is completed.";
-				System.out.println("Transaction  tx: " + event.getTransactionID() + "is completed.");
-				dealTransaction =dealTransaction + "Transaction  tx: " + event.getTransactionID() + "is completed.";
-			//	transactionLog = transactionLog+"Transaction  timestamp: " + event.getTimestamp();
-				System.out.println("Transaction  timestamp: " + event.getTimestamp());
+			if (event.isValid()) {				
+				dealTransaction =dealTransaction + "Transaction  tx: " + event.getTransactionID() + "is completed.";			
 				dealTransaction =dealTransaction + "Transaction  timestamp: " + event.getTimestamp();
-			} else {
-			//	transactionLog = transactionLog+"Transaction  tx: " + event.getTransactionID() + "is invalid.";
-				System.out.println("Transaction  tx: " + event.getTransactionID() + "is invalid.");
-				dealTransaction =dealTransaction + "Transaction  tx: " + event.getTransactionID() + "is invalid.";
-				//transactionLog = transactionLog+"Transaction  timestamp: " + event.getTimestamp();
-				System.out.println("Transaction  timestamp: " + event.getTimestamp());
+			} else {			
+				dealTransaction =dealTransaction + "Transaction  tx: " + event.getTransactionID() + "is invalid.";					
 				dealTransaction =dealTransaction + "Transaction  timestamp: " + event.getTimestamp();
 			}
 			
@@ -438,6 +421,21 @@ public class DSCHController implements Initializable{
 				JsonPrimitive hasFruitPrimitive = valueObject.getAsJsonPrimitive("hasFruit");
 				assetArray.add(new AssetInfo("hasFruit", hasFruitPrimitive.getAsString()));
 
+				JsonPrimitive boxVegetablePrimitive = valueObject.getAsJsonPrimitive("boxVegetable");
+				assetArray.add(new AssetInfo("boxVegetable", boxVegetablePrimitive.getAsString()));
+				
+				JsonPrimitive boxMineralPrimitive = valueObject.getAsJsonPrimitive("boxMineral");
+				assetArray.add(new AssetInfo("boxMineral", boxMineralPrimitive.getAsString()));
+				
+				JsonPrimitive boxMeatPrimitive = valueObject.getAsJsonPrimitive("boxMeat");
+				assetArray.add(new AssetInfo("boxMeat", boxMeatPrimitive.getAsString()));
+				
+				JsonPrimitive boxGrainPrimitive = valueObject.getAsJsonPrimitive("boxGrain");
+				assetArray.add(new AssetInfo("boxGrain", boxGrainPrimitive.getAsString()));
+				
+				JsonPrimitive boxFruitPrimitive = valueObject.getAsJsonPrimitive("boxFruit");
+				assetArray.add(new AssetInfo("boxFruit", boxFruitPrimitive.getAsString()));
+				
 				UserAsset userAsset = new UserAsset(keyPrimitive.getAsString(), assetArray);
 				userAssetObservableList.add(userAsset);
 				userMap.put(keyPrimitive.getAsString(), userAsset);
@@ -528,8 +526,12 @@ public class DSCHController implements Initializable{
 		}
 		*/
 		//String userHash = sb.toString();
-		
-    	String[] userInitInformation = new String[] {initUserIDfield.getText(),initUserNamefield.getText(),  initMoneyfield.getText(), initVegetablefield.getText(), initMineralfield.getText(), initMeatfield.getText(), initGrainfield.getText(), initFruitfield.getText() };
+    	
+    
+    	
+  
+    	String[] userInitInformation = new String[] {initUserIDfield.getText(),initUserNamefield.getText(),  initMoneyfield.getText(), initVegetablefield.getText(), initMineralfield.getText(), initMeatfield.getText(), initGrainfield.getText(), 
+    			initFruitfield.getText(), initBoxVegetablefield.getText(), 	initBoxMineralfield.getText(), initBoxMeatfield.getText(), initBoxGrainfield.getText(), initBoxFruitfield.getText()};
     	System.out.println("Insert user Informations");
     	for(int i=0; i<userInitInformation.length; i++) {
     		System.out.println(i+": "+userInitInformation[i]);
@@ -583,6 +585,17 @@ public class DSCHController implements Initializable{
 						historyText =historyText+"     Grain: "+hasGrainPrimitive.getAsString()+"\n";
 						JsonPrimitive hasFruitPrimitive = jsonObject.getAsJsonPrimitive("hasFruit");
 						historyText =historyText+"     Fruit: "+hasFruitPrimitive.getAsString()+"\n";
+						JsonPrimitive boxVegetablePrimitive = jsonObject.getAsJsonPrimitive("boxVegetable");
+						historyText =historyText+"     VegetableBox: "+boxVegetablePrimitive.getAsString()+"\n";
+						JsonPrimitive boxMineralPrimitive = jsonObject.getAsJsonPrimitive("boxMineral");
+						historyText =historyText+"     MineralBox: "+boxMineralPrimitive.getAsString()+"\n";
+						JsonPrimitive boxMeatPrimitive = jsonObject.getAsJsonPrimitive("boxMeat");
+						historyText =historyText+"     MeatBox: "+boxMeatPrimitive.getAsString()+"\n";
+						JsonPrimitive boxGrainPrimitive = jsonObject.getAsJsonPrimitive("boxGrain");
+						historyText =historyText+"     GrainBox: "+boxGrainPrimitive.getAsString()+"\n";
+						JsonPrimitive boxFruitPrimitive = jsonObject.getAsJsonPrimitive("boxFruit");
+						historyText =historyText+"     FruitBox: "+boxFruitPrimitive.getAsString()+"\n";
+						
 			     }
 			}
 		

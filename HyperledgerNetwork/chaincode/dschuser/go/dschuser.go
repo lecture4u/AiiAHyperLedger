@@ -52,6 +52,11 @@ type UserAsset struct {
 	HasMeat      string `json:"hasMeat"`
 	HasGrain     string `json:"hasGrain"`
 	HasFruit     string `json:"hasFruit"`
+	BoxVegetable string `json:"boxVegetable"`
+	BoxMineral   string `json:"boxMineral"`
+	BoxMeat      string `json:"boxMeat"`
+	BoxGrain     string `json:"boxGrain"`
+	BoxFruit     string `json:"boxFruit"`
 }
 
 /*
@@ -145,20 +150,25 @@ func (s *SmartContract) queryAllUserList(APIstub shim.ChaincodeStubInterface) sc
 
 func (s *SmartContract) initLedger(APIstub shim.ChaincodeStubInterface) sc.Response {
 	/*
-		UserName     string `json:"userName"`
-		HasMoney     string `json:"hasMoney"`
-		HasVegetable string `json:"hasVegetable"`
-		HasMineral   string `json:"hasMineral"`
-		HasMeat      string `json:"hasMeat"`
-		HasGrain     string `json:"hasGrain"`
-		HasFruit     string `json:"hasFruit"`
+			UserName     string `json:"userName"`
+			HasMoney     string `json:"hasMoney"`
+			HasVegetable string `json:"hasVegetable"`
+			HasMineral   string `json:"hasMineral"`
+			HasMeat      string `json:"hasMeat"`
+			HasGrain     string `json:"hasGrain"`
+			HasFruit     string `json:"hasFruit"`
+			BoxVegetable string `json:"boxVegetable"`
+		    BoxMineral   string `json:"boxMineral"`
+		    BoxMeat      string `json:"boxMeat"`
+		    BoxGrain     string `json:"boxGrain"`
+		    BoxFruit     string `json:"boxFruit"
 	*/
 	assets := []UserAsset{
-		UserAsset{UserName: "JungHyunAn", HasMoney: "781", HasVegetable: "70", HasMineral: "468", HasMeat: "972", HasGrain: "761", HasFruit: "669"},
-		UserAsset{UserName: "Chathy M. kinney", HasMoney: "772", HasVegetable: "767", HasMineral: "52", HasMeat: "400", HasGrain: "101", HasFruit: "670"},
-		UserAsset{UserName: "Donald C. Lupien", HasMoney: "970", HasVegetable: "554", HasMineral: "592", HasMeat: "575", HasGrain: "400", HasFruit: "391"},
-		UserAsset{UserName: "KristaC. Bruner", HasMoney: "614", HasVegetable: "341", HasMineral: "120", HasMeat: "952", HasGrain: "100", HasFruit: "568"},
-		UserAsset{UserName: "Katrina J. Kiss", HasMoney: "546", HasVegetable: "17", HasMineral: "487", HasMeat: "166", HasGrain: "931", HasFruit: "830"},
+		UserAsset{UserName: "JungHyunAn", HasMoney: "781122", HasVegetable: "701", HasMineral: "468", HasMeat: "972", HasGrain: "761", HasFruit: "669", BoxVegetable: "7", BoxMineral: "46", BoxMeat: "97", BoxGrain: "76", BoxFruit: "66"},
+		UserAsset{UserName: "Chathy M. kinney", HasMoney: "77234", HasVegetable: "7671", HasMineral: "52", HasMeat: "400", HasGrain: "101", HasFruit: "670", BoxVegetable: "76", BoxMineral: "5", BoxMeat: "4", BoxGrain: "10", BoxFruit: "67"},
+		UserAsset{UserName: "Donald C. Lupien", HasMoney: "97012", HasVegetable: "5541", HasMineral: "592", HasMeat: "575", HasGrain: "400", HasFruit: "391", BoxVegetable: "55", BoxMineral: "59", BoxMeat: "57", BoxGrain: "40", BoxFruit: "39"},
+		UserAsset{UserName: "KristaC. Bruner", HasMoney: "61442", HasVegetable: "3411", HasMineral: "120", HasMeat: "952", HasGrain: "100", HasFruit: "568", BoxVegetable: "34", BoxMineral: "12", BoxMeat: "95", BoxGrain: "10", BoxFruit: "56"},
+		UserAsset{UserName: "Katrina J. Kiss", HasMoney: "54611", HasVegetable: "1711", HasMineral: "487", HasMeat: "166", HasGrain: "931", HasFruit: "830", BoxVegetable: "17", BoxMineral: "48", BoxMeat: "16", BoxGrain: "93", BoxFruit: "83"},
 	}
 
 	i := 0
@@ -175,11 +185,11 @@ func (s *SmartContract) initLedger(APIstub shim.ChaincodeStubInterface) sc.Respo
 
 func (s *SmartContract) registUserAsset(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
 
-	if len(args) != 8 {
-		return shim.Error("Incorrect number of arguments. Expecting 8")
+	if len(args) != 13 {
+		return shim.Error("Incorrect number of arguments. Expecting 13")
 	}
 
-	var asset = UserAsset{UserName: args[1], HasMoney: args[2], HasVegetable: args[3], HasMineral: args[4], HasMeat: args[5], HasGrain: args[6], HasFruit: args[7]}
+	var asset = UserAsset{UserName: args[1], HasMoney: args[2], HasVegetable: args[3], HasMineral: args[4], HasMeat: args[5], HasGrain: args[6], HasFruit: args[7], BoxVegetable: args[8], BoxMineral: args[9], BoxMeat: args[10], BoxGrain: args[11], BoxFruit: args[12]}
 
 	assetAsBytes, _ := json.Marshal(asset)
 	APIstub.PutState(args[0], assetAsBytes)
@@ -280,49 +290,49 @@ func (s *SmartContract) sellingAsset(APIstub shim.ChaincodeStubInterface, args [
 	assetName := args[1]
 	switch {
 	case assetName == "Vegetable":
-		assetVegetable, err := strconv.Atoi(userAsset.HasVegetable)
+		assetVegetable, err := strconv.Atoi(userAsset.BoxVegetable)
 		checkError(err)
 		assetVegeArg, err := strconv.Atoi(args[2])
 		checkError(err)
 
 		assetVegetable = assetVegetable - assetVegeArg
-		userAsset.HasVegetable = strconv.Itoa(assetVegetable)
+		userAsset.BoxVegetable = strconv.Itoa(assetVegetable)
 
 	case assetName == "Mineral":
-		assetMineral, err := strconv.Atoi(userAsset.HasMineral)
+		assetMineral, err := strconv.Atoi(userAsset.BoxMineral)
 		checkError(err)
 		assetMineralArg, err := strconv.Atoi(args[2])
 		checkError(err)
 		assetMineral = assetMineral - assetMineralArg
 
-		userAsset.HasMineral = strconv.Itoa(assetMineral)
+		userAsset.BoxMineral = strconv.Itoa(assetMineral)
 
 	case assetName == "Meat":
-		assetMeat, err := strconv.Atoi(userAsset.HasMeat)
+		assetMeat, err := strconv.Atoi(userAsset.BoxMeat)
 		checkError(err)
 		assetMeatArg, err := strconv.Atoi(args[2])
 		checkError(err)
 
 		assetMeat = assetMeat - assetMeatArg
-		userAsset.HasMeat = strconv.Itoa(assetMeat)
+		userAsset.BoxMeat = strconv.Itoa(assetMeat)
 
 	case assetName == "Grain":
-		assetGrain, err := strconv.Atoi(userAsset.HasGrain)
+		assetGrain, err := strconv.Atoi(userAsset.BoxGrain)
 		checkError(err)
 		assetGrainArg, err := strconv.Atoi(args[2])
 		checkError(err)
 
 		assetGrain = assetGrain - assetGrainArg
-		userAsset.HasGrain = strconv.Itoa(assetGrain)
+		userAsset.BoxGrain = strconv.Itoa(assetGrain)
 
 	case assetName == "Fruit":
-		assetFruit, err := strconv.Atoi(userAsset.HasFruit)
+		assetFruit, err := strconv.Atoi(userAsset.BoxFruit)
 		checkError(err)
 		assetFruitArg, err := strconv.Atoi(args[2])
 		checkError(err)
 
 		assetFruit = assetFruit - assetFruitArg
-		userAsset.HasFruit = strconv.Itoa(assetFruit)
+		userAsset.BoxFruit = strconv.Itoa(assetFruit)
 
 	default:
 		panic("unrecognized asset name")
