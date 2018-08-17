@@ -42,6 +42,7 @@ import javafx.stage.Stage;
 import java.text.SimpleDateFormat;
 
 public class DSCHController implements Initializable{
+	/*-------BlockChain network Connection components----------------*/
 	CAConnector caconnector;
 	ChainCodeConnector org1ChainConnector;
 	ChainCodeConnector org2ChainConnector;
@@ -251,11 +252,12 @@ public class DSCHController implements Initializable{
            
            int currentUserMoneyInt = Integer.parseInt(currentUserMoney);
            int wholeSaleMarketPriceInt = Integer.parseInt(wholeSaleMarketPrice);
-           resultUserAssetQuantityInt = currentUserMoneyInt+ wholeSaleMarketPriceInt* (assetQuantityInt/100);
+           int resultAssetPrice = wholeSaleMarketPriceInt* assetQuantityInt;
+           resultUserAssetQuantityInt = currentUserMoneyInt+ resultAssetPrice;
            //System.out.println("               User's Money         :"+currentUserMoneyInt+"+"+wholeSaleMarketPrice+"*("+assetQuantityInt+"/1oo)="+resultUserAssetQuantityInt);
-           dealTransaction = dealTransaction +"               User's Money         :"+currentUserMoneyInt+"+"+wholeSaleMarketPrice+"*("+assetQuantityInt+"/1oo)="+resultUserAssetQuantityInt+"\n";
+           dealTransaction = dealTransaction +"               User's Money         :"+currentUserMoneyInt+"+"+wholeSaleMarketPrice+"*"+assetQuantityInt+"="+resultUserAssetQuantityInt+"\n";
            
-           BlockEvent.TransactionEvent event = org1ChainConnector.invokeBlockChain("dschuser","sellingAsset",new String[] {currentUser, assetNamefield.getText(),assetQuantityfield.getText(),resultUserAssetQuantityInt+""})
+           BlockEvent.TransactionEvent event = org1ChainConnector.invokeBlockChain("dschuser","sellingAsset",new String[] {currentUser, assetNamefield.getText(),assetQuantityfield.getText(),resultAssetPrice+""})
 					.get(1200, TimeUnit.SECONDS);
 			if (event.isValid()) {
 				dealTransaction = dealTransaction +"Transaction  tx: " + event.getTransactionID() + "is completed."+"\n";
@@ -334,11 +336,13 @@ public class DSCHController implements Initializable{
            
            int currentUserMoneyInt = Integer.parseInt(currentUserMoney);
            int retailMarketPriceInt = Integer.parseInt(retailMarketPrice);
-           resultUserAssetQuantityInt = currentUserMoneyInt - retailMarketPriceInt* (assetQuantityInt);
+           int resultAssetPrice = retailMarketPriceInt* assetQuantityInt;
+           resultUserAssetQuantityInt = currentUserMoneyInt - resultAssetPrice;
+         
            System.out.println("               User's Money         :"+currentUserMoneyInt+"-"+retailMarketPrice+"*"+assetQuantityInt+"="+resultUserAssetQuantityInt);
            dealTransaction =dealTransaction + "               User's Money         :"+currentUserMoneyInt+"-"+retailMarketPrice+"*"+assetQuantityInt+"="+resultUserAssetQuantityInt+"\n";
            
-           BlockEvent.TransactionEvent event = org1ChainConnector.invokeBlockChain("dschuser","buyingAsset",new String[] {currentUser, assetNamefield.getText(),assetQuantityfield.getText(),resultUserAssetQuantityInt+""})
+           BlockEvent.TransactionEvent event = org1ChainConnector.invokeBlockChain("dschuser","buyingAsset",new String[] {currentUser, assetNamefield.getText(),assetQuantityfield.getText(),resultAssetPrice+""})
 					.get(1200, TimeUnit.SECONDS);
 			if (event.isValid()) {		
 				dealTransaction =dealTransaction + "Transaction  tx: " + event.getTransactionID() + "is completed.";		        

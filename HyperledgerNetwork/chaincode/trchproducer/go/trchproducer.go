@@ -154,11 +154,11 @@ func (s *SmartContract) initLedger(APIstub shim.ChaincodeStubInterface) sc.Respo
 		HasFruit     string `json:"hasFruit"`
 	*/
 	assets := []UserAsset{
-		UserAsset{UserName: "JungHyunAn", HasMoney: "781", HasVegetable: "70", HasMineral: "468", HasMeat: "972", HasGrain: "761", HasFruit: "669"},
-		UserAsset{UserName: "Chathy M. kinney", HasMoney: "772", HasVegetable: "767", HasMineral: "52", HasMeat: "400", HasGrain: "101", HasFruit: "670"},
-		UserAsset{UserName: "Donald C. Lupien", HasMoney: "970", HasVegetable: "554", HasMineral: "592", HasMeat: "575", HasGrain: "400", HasFruit: "391"},
-		UserAsset{UserName: "KristaC. Bruner", HasMoney: "614", HasVegetable: "341", HasMineral: "120", HasMeat: "952", HasGrain: "100", HasFruit: "568"},
-		UserAsset{UserName: "Katrina J. Kiss", HasMoney: "546", HasVegetable: "17", HasMineral: "487", HasMeat: "166", HasGrain: "931", HasFruit: "830"},
+		UserAsset{UserName: "JungHyunAn", HasMoney: "1000000", HasVegetable: "1000", HasMineral: "1000", HasMeat: "1000", HasGrain: "1000", HasFruit: "1000"},
+		UserAsset{UserName: "Chathy M. kinney", HasMoney: "2000000", HasVegetable: "2000", HasMineral: "2000", HasMeat: "2000", HasGrain: "2000", HasFruit: "2000"},
+		UserAsset{UserName: "Donald C. Lupien", HasMoney: "3000000", HasVegetable: "3000", HasMineral: "3000", HasMeat: "3000", HasGrain: "3000", HasFruit: "3000"},
+		UserAsset{UserName: "KristaC. Bruner", HasMoney: "4000000", HasVegetable: "4000", HasMineral: "4000", HasMeat: "4000", HasGrain: "4000", HasFruit: "4000"},
+		UserAsset{UserName: "Katrina J. Kiss", HasMoney: "5000000", HasVegetable: "5000", HasMineral: "5000", HasMeat: "5000", HasGrain: "5000", HasFruit: "5000"},
 	}
 
 	i := 0

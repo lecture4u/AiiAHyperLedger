@@ -62,7 +62,7 @@ services:
       - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.org4.trch.com-cert.pem
       - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/bab68085bcba6df3ac00248a70a85a7dd32b5e76d8beaeef9681ebb344707d40_sk
     ports:
-      - "10054:10054"
+      - "10054:7054"
     command: sh -c 'fabric-ca-server start -b admin4:adminpw4 -d'
     volumes:
       - ./crypto-config/peerOrganizations/org4.trch.com/ca/:/etc/hyperledger/fabric-ca-server-config

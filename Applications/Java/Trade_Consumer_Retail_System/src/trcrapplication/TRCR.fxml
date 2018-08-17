@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-	
+
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
@@ -16,6 +16,182 @@
 	<content>
 		<AnchorPane prefHeight="798.0" prefWidth="998.0">
          <children>
+         <TabPane prefHeight="798.0" prefWidth="998.0" tabClosingPolicy="UNAVAILABLE">
+              <tabs>
+                <Tab text="User">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <TitledPane animated="false" layoutX="14.0" layoutY="14.0" prefHeight="126.0" prefWidth="968.0" text="BlockChain Network Connection(System Manager need all 3 Organization connected)">
+                                <content>
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <Label layoutX="14.0" layoutY="14.0" text="ConnectionID    :" />
+                                          <Label layoutX="14.0" layoutY="50.0" text="ConnectionOrg:" />
+                                          <Label layoutX="14.0" layoutY="77.0" text="Org2Connection status:" />
+                                          <Label fx:id="org2ConnectionLabel" layoutX="179.0" layoutY="77.0" text="Disconnected" />
+                                          <Label layoutX="299.0" layoutY="77.0" text="Org3Connection status:" />
+                                          <Label fx:id="org3ConnectionLabel" layoutX="465.0" layoutY="77.0" text="Disconnected" />
+                                          <Label layoutX="590.0" layoutY="77.0" text="Org4ConnectionStatus" />
+                                          <Label fx:id="org4ConnectionLabel" layoutX="753.0" layoutY="77.0" text="Disconnected" />
+                                          <TextField fx:id="userIDfield" layoutX="130.0" layoutY="9.0" prefHeight="26.0" prefWidth="223.0" />
+                                          <TextField fx:id="userOrgfield" layoutX="130.0" layoutY="45.0" prefHeight="26.0" prefWidth="223.0" />
+                                          <Label layoutX="368.0" layoutY="50.0" text="(Org2, Org3, Org4, ....)" />
+                                          <Button layoutX="519.0" layoutY="45.0" mnemonicParsing="false" onAction="#registerUser" text="Resister" />
+                                          <Button layoutX="594.0" layoutY="45.0" mnemonicParsing="false" onAction="#loginUser" text="Login" />
+                                       </children>
+                                    </AnchorPane>
+                                </content>
+                              </TitledPane>
+                              <TitledPane animated="false" layoutX="14.0" layoutY="162.0" prefHeight="593.0" prefWidth="633.0" text="Trade Provider status(Asset: Ind)">
+                                <content>
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <Button layoutX="15.0" layoutY="25.0" mnemonicParsing="false" onAction="#queryParticipants" text="Refresh" />
+                                          <Label layoutX="65.0" layoutY="67.0" text="Consumer List" />
+                                          <Label layoutX="364.0" layoutY="67.0" text="Consumer Asset Status" />
+                                          <TableView fx:id="userListTableView" layoutX="17.0" layoutY="90.0" prefHeight="423.0" prefWidth="190.0">
+                                            <columns>
+                                              <TableColumn fx:id="userIDColumn" prefWidth="189.0" text="User ID" />
+                                            </columns>
+                                          </TableView>
+                                          <TableView fx:id="userAssetStatusTableView" layoutX="270.0" layoutY="88.0" prefHeight="428.0" prefWidth="324.0">
+                                            <columns>
+                                              <TableColumn fx:id="userInfoNameColumn" prefWidth="162.0" text="Name" />
+                                              <TableColumn fx:id="userInfoValueColumn" prefWidth="161.0" text="Value" />
+                                            </columns>
+                                          </TableView>
+                                          <Label layoutX="5.0" layoutY="529.0" text="Asset Name:" />
+                                          <Label layoutX="270.0" layoutY="529.0" text="Asset Quantity:" />
+                                          <TextField fx:id="assetNamefield" layoutX="92.0" layoutY="524.0" prefHeight="26.0" prefWidth="115.0" />
+                                          <TextField fx:id="assetQuantityfield" layoutX="375.0" layoutY="524.0" prefHeight="26.0" prefWidth="130.0" />
+                                          <Button layoutX="532.0" layoutY="524.0" mnemonicParsing="false" onAction="#buyingAsset" text="Buying" />
+                                       </children>
+                                    </AnchorPane>
+                                </content>
+                              </TitledPane>
+                              <TitledPane animated="false" layoutX="657.0" layoutY="162.0" prefHeight="593.0" prefWidth="325.0" text="Regist New Consumer">
+                                <content>
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <Label layoutX="14.0" layoutY="14.0" text="UserID" />
+                                          <Label layoutX="14.0" layoutY="74.0" text="Name" />
+                                          <Label layoutX="14.0" layoutY="136.0" text="InitMoney" />
+                                          <Label layoutX="14.0" layoutY="198.0" text="InitVegetable" />
+                                          <Label layoutX="14.0" layoutY="255.0" text="InitMineral" />
+                                          <Label layoutX="14.0" layoutY="319.0" text="InitMeat" />
+                                          <Label layoutX="14.0" layoutY="379.0" text="InitGrain" />
+                                          <Label layoutX="14.0" layoutY="436.0" text="InitFruit" />
+                                          <TextField fx:id="initUserIDfield" layoutX="14.0" layoutY="38.0" prefHeight="26.0" prefWidth="154.0" />
+                                          <TextField fx:id="initUserNamefield" layoutX="14.0" layoutY="98.0" prefHeight="26.0" prefWidth="154.0" />
+                                          <TextField fx:id="initMoneyfield" layoutX="14.0" layoutY="160.0" prefHeight="26.0" prefWidth="154.0" />
+                                          <TextField fx:id="initVegetablefield" layoutX="14.0" layoutY="221.0" prefHeight="26.0" prefWidth="154.0" />
+                                          <TextField fx:id="initMineralfield" layoutX="14.0" layoutY="282.0" prefHeight="26.0" prefWidth="154.0" />
+                                          <TextField fx:id="initMeatfield" layoutX="14.0" layoutY="344.0" prefHeight="26.0" prefWidth="154.0" />
+                                          <TextField fx:id="initGrainfield" layoutX="14.0" layoutY="402.0" prefHeight="26.0" prefWidth="154.0" />
+                                          <TextField fx:id="initFruitfield" layoutX="14.0" layoutY="459.0" prefHeight="25.0" prefWidth="154.0" />
+                                          <Button layoutX="13.0" layoutY="526.0" mnemonicParsing="false" onAction="#insertNewUserAccount" text="Create" />
+                                       </children>
+                                    </AnchorPane>
+                                </content>
+                              </TitledPane>
+                           </children>
+                        </AnchorPane>
+                  </content>
+                </Tab>
+                <Tab text="WholeSale &amp; Retail">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <TitledPane animated="false" layoutX="14.0" layoutY="25.0" prefHeight="710.0" prefWidth="463.0" text="Whole Sale">
+                                <content>
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="461.0">
+                                       <children>
+                                          <TableView fx:id="wholeSaleTableView" layoutX="15.0" layoutY="14.0" prefHeight="622.0" prefWidth="432.0">
+                                            <columns>
+                                              <TableColumn fx:id="wholesaleAssetNameColumn" prefWidth="140.0" text="AssetName" />
+                                              <TableColumn fx:id="wholesaleMarketPriceColumn" prefWidth="135.0" text="MarketPrice" />
+                                                <TableColumn fx:id="wholesaleQuantityColumn" prefWidth="156.0" text="Quantity" />
+                                            </columns>
+                                          </TableView>
+                                       </children>
+                                    </AnchorPane>
+                                </content>
+                              </TitledPane>
+                              <TitledPane animated="false" layoutX="502.0" layoutY="25.0" prefHeight="710.0" prefWidth="473.0" text="Retail">
+                                <content>
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <TableView fx:id="retailTableView" layoutX="14.0" layoutY="14.0" prefHeight="622.0" prefWidth="441.0">
+                                            <columns>
+                                              <TableColumn fx:id="retailAssetNameColumn" prefWidth="131.0" text="AssetName" />
+                                              <TableColumn fx:id="retailMarketPriceColumn" prefWidth="159.0" text="MarketPrice" />
+                                                <TableColumn fx:id="retailQuantityColumn" prefWidth="150.0" text="Quantity" />
+                                            </columns>
+                                          </TableView>
+                                          <Button layoutX="362.0" layoutY="642.0" mnemonicParsing="false" onAction="#transportWholesaleToRetail" text="Transport" />
+                                          <TextField fx:id="retailAssetQuantityField" layoutX="258.0" layoutY="643.0" prefHeight="26.0" prefWidth="97.0" />
+                                          <Label layoutX="190.0" layoutY="648.0" text="Quantity:" />
+                                          <TextField fx:id="retailAssetNameField" layoutX="105.0" layoutY="643.0" prefHeight="26.0" prefWidth="76.0" />
+                                          <Label layoutX="14.0" layoutY="647.0" text="Asset Name:" />
+                                       </children>
+                                    </AnchorPane>
+                                </content>
+                              </TitledPane>
+                           </children>
+                        </AnchorPane>
+                  </content>
+                </Tab>
+                  <Tab text="Trade">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <Label layoutX="14.0" layoutY="28.0" text="Trade List" />
+                              <Label layoutX="14.0" layoutY="301.0" text="Trade Transaction View" />
+                              <TableView fx:id="dealListTableView" layoutX="14.0" layoutY="54.0" prefHeight="222.0" prefWidth="961.0">
+                                <columns>
+                                  <TableColumn fx:id="dealNameColumn" prefWidth="170.0" text="Name" />
+                                  <TableColumn fx:id="dealTypeColumn" prefWidth="172.0" text="Type" />
+                                    <TableColumn fx:id="dealSenderColumn" prefWidth="217.0" text="Sender" />
+                                    <TableColumn fx:id="dealReceiveColumn" prefWidth="196.0" text="Reciver" />
+                                    <TableColumn fx:id="dealAssetColumn" prefWidth="205.0" text="Asset" />
+                                </columns>
+                              </TableView>
+                              <TextArea fx:id="dealTransactionArea" layoutX="14.0" layoutY="333.0" prefHeight="415.0" prefWidth="964.0" />
+                           </children>
+                        </AnchorPane>
+                    </content>
+                  </Tab>
+                  <Tab text="History">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <TextArea fx:id="histroyArea" layoutX="288.0" layoutY="9.0" prefHeight="748.0" prefWidth="696.0" />
+                              <Label layoutX="14.0" layoutY="14.0" text="ConsumerAssetHistory(Consumer ID)" />
+                              <Label layoutX="14.0" layoutY="101.0" text="RetailAssetHistory" />
+                              <TextField fx:id="userAssetHistoryfield" layoutX="14.0" layoutY="37.0" />
+                              <TextField fx:id="retailAssetHistoryfield" layoutX="14.0" layoutY="117.0" />
+                              <Button layoutX="202.0" layoutY="37.0" mnemonicParsing="false" onAction="#queryUserHistory" text="Search" />
+                              <Button layoutX="202.0" layoutY="117.0" mnemonicParsing="false" onAction="#queryRetailrHistory" text="Search" />
+                           </children>
+                        </AnchorPane>
+                    </content>
+                  </Tab>
+                  <Tab text="Block Info">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <Button layoutX="913.0" layoutY="14.0" mnemonicParsing="false" onAction="#queryBlockChain" text="Search" />
+                              <Label layoutX="22.0" layoutY="19.0" text="Block Information View" />
+                              <TextArea fx:id="blockInfoArea" layoutX="22.0" layoutY="55.0" prefHeight="683.0" prefWidth="954.0" />
+                              <TextField fx:id="blockNumberField" layoutX="729.0" layoutY="14.0" />
+                              <Label layoutX="633.0" layoutY="19.0" text="Block Number:" />
+                           </children>
+                        </AnchorPane>
+                    </content>
+                  </Tab>
+              </tabs>
+            </TabPane>
          </children>
        </AnchorPane>
     </content>

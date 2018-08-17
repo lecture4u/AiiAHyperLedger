@@ -152,11 +152,11 @@ func (s *SmartContract) initLedger(APIstub shim.ChaincodeStubInterface) sc.Respo
 			HasFruit     string `json:"hasFruit"`
 	*/
 	assets := []WholeAsset{
-		WholeAsset{MarketPrice: "15588", Quantity: "350"},
-		WholeAsset{MarketPrice: "16232", Quantity: "574"},
-		WholeAsset{MarketPrice: "13320", Quantity: "254"},
-		WholeAsset{MarketPrice: "13441", Quantity: "95"},
-		WholeAsset{MarketPrice: "13079", Quantity: "146"},
+		WholeAsset{MarketPrice: "100", Quantity: "10000000"},
+		WholeAsset{MarketPrice: "200", Quantity: "20000000"},
+		WholeAsset{MarketPrice: "300", Quantity: "30000000"},
+		WholeAsset{MarketPrice: "400", Quantity: "40000000"},
+		WholeAsset{MarketPrice: "500", Quantity: "50000000"},
 	}
 
 	assetAsBytes, _ := json.Marshal(assets[0])
