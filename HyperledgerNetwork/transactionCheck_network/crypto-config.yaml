@@ -1,24 +1,19 @@
 OrdererOrgs:
   - Name: Orderer
-    Domain: dsch.com
+    Domain: trnc.com
     Specs:
       - Hostname: orderer
 PeerOrgs:
   - Name: Org1
-    Domain: org1.dsch.com
+    Domain: org1.trnc.com
     Template:
-      Count: 2
+      Count: 1
     Users:
       Count: 1
   - Name: Org2
-    Domain: org2.dsch.com
+    Domain: org2.trnc.com
     Template:
-      Count: 2
+      Count: 1 
     Users:
       Count: 1 
-  - Name: Org3
-    Domain: org3.dsch.com
-    Template:
-      Count: 2
-    Users:
-      Count: 1 
+ 
