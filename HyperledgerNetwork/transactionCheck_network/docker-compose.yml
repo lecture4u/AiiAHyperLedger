@@ -11,7 +11,7 @@ services:
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
       - FABRIC_CA_SERVER_CA_NAME=ca.org1.trnc.com
       - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.org1.trnc.com-cert.pem
-      - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/250eacf946d79002acafa7fdbf7a1a233063907920a73dec2074c605256a4a0e_sk
+      - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/3a8c4afa2a14ed72050d7c29ebb366e31cdb8431fb50420abba94be43e4acb35_sk
     ports:
       - "7054:7054"
     command: sh -c 'fabric-ca-server start -b admin:adminpw -d'
@@ -27,7 +27,7 @@ services:
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
       - FABRIC_CA_SERVER_CA_NAME=ca.org2.trnc.com
       - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.org2.trnc.com-cert.pem
-      - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/8f9dfc60a2d2bbf64eaee91fd4e7692d241994ab6c5327bb178d9c6975bd76ef_sk
+      - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/13bb5cc584e0855ee7ac4c44e56b756ae49b0a464b8c02eba83badfa0ceb1df3_sk
     ports:
       - "8054:7054"
     command: sh -c 'fabric-ca-server start -b admin2:adminpw2 -d'

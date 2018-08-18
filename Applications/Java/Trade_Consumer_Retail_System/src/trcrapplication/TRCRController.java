@@ -106,10 +106,11 @@ public class TRCRController implements Initializable{
 	/*-----------History Tab - components----------------*/
 	@FXML TextField userAssetHistoryfield;
 	@FXML TextField retailAssetHistoryfield;
+	@FXML TextArea histroyArea;
 	/*-----------WholeSale<->Retail trade components----------------*/
 	@FXML TextField retailAssetNameField;
 	@FXML TextField retailAssetQuantityField;
-	@FXML TextArea histroyArea;
+
 	/*-----------BlockInfo components----------------*/
 	@FXML TextArea blockInfoArea;
 	@FXML TextField blockNumberField;
