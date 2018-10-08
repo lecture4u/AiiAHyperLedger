@@ -1,0 +1,364 @@
+
+version: '2'
+
+networks:
+  basic:
+
+services:
+  ca.org1.trpw.com:
+    image: hyperledger/fabric-ca
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca.org1.trpw.com
+      - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.org1.trpw.com-cert.pem
+      - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/f1913d327ce9b122919c894028779ac51ef4473fadd458f449ff55ecb3f832fc_sk
+    ports:
+      - "7054:7054"
+    command: sh -c 'fabric-ca-server start -b admin:adminpw -d'
+    volumes:
+      - ./crypto-config/peerOrganizations/org1.trpw.com/ca/:/etc/hyperledger/fabric-ca-server-config
+    container_name: ca.org1.trpw.com
+    networks:
+      - basic
+
+  ca.org2.trpw.com:
+    image: hyperledger/fabric-ca
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca.org2.trpw.com
+      - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.org2.trpw.com-cert.pem
+      - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/68665530cfb643bff46a19c9965c0e74c41e68239b2f778007d8aef4a428cc53_sk
+    ports:
+      - "8054:7054"
+    command: sh -c 'fabric-ca-server start -b admin2:adminpw2 -d'
+    volumes:
+      - ./crypto-config/peerOrganizations/org2.trpw.com/ca/:/etc/hyperledger/fabric-ca-server-config
+    container_name: ca.org2.trpw.com
+    networks:
+      - basic
+
+  ca.org3.trcr.com:
+    image: hyperledger/fabric-ca
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca.org3.trcr.com
+      - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.org3.trcr.com-cert.pem
+      - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/604911cf4629302dd8cebc44aefe0d500a6d79e2ad6b3fef452a1b1929366b5a_sk
+    ports:
+      - "9054:7054"
+    command: sh -c 'fabric-ca-server start -b admin3:adminpw3 -d'
+    volumes:
+      - ./crypto-config/peerOrganizations/org3.trcr.com/ca/:/etc/hyperledger/fabric-ca-server-config
+      - ./caorg3config/:/etc/hyperledger/fabric-ca-server
+    container_name: ca.org3.trcr.com
+    networks:
+      - basic
+ 
+  ca.org4.trcr.com:
+    image: hyperledger/fabric-ca
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca.org4.trcr.com
+      - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.org4.trcr.com-cert.pem
+      - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/0cfeb0be52a3dfcff72f0a5b8e79cfc08372f766ae6565bb0f14145e8f380c13_sk
+    ports:
+      - "10054:7054"
+    command: sh -c 'fabric-ca-server start -b admin4:adminpw4 -d'
+    volumes:
+      - ./crypto-config/peerOrganizations/org4.trcr.com/ca/:/etc/hyperledger/fabric-ca-server-config
+      - ./caorg4config/:/etc/hyperledger/fabric-ca-server
+    container_name: ca.org4.trcr.com
+    networks:
+      - basic
+  
+  zookeeper0:
+    image: hyperledger/fabric-zookeeper
+    environment:
+      - ZOO_MY_ID=1
+      - ZOO_SERVERS=server.1=zookeeper0:2888:3888 server.2=zookeeper1:2888:3888 server.3=zookeeper2:2888:3888
+    ports:
+      - '2181'
+      - '2888'
+      - '3888'
+    restart: always
+    container_name: zookeeper0
+    networks:
+      - basic
+
+  zookeeper1:
+    image: hyperledger/fabric-zookeeper
+    environment:
+      - ZOO_MY_ID=2
+      - ZOO_SERVERS=server.1=zookeeper0:2888:3888 server.2=zookeeper1:2888:3888 server.3=zookeeper2:2888:3888
+    ports:
+      - '2181'
+      - '2888'
+      - '3888'
+    restart: always
+    container_name: zookeeper1
+    networks:
+      - basic
+
+  zookeeper2:
+    image: hyperledger/fabric-zookeeper
+    environment:
+      - ZOO_MY_ID=3
+      - ZOO_SERVERS=server.1=zookeeper0:2888:3888 server.2=zookeeper1:2888:3888 server.3=zookeeper2:2888:3888
+    ports:
+      - '2181'
+      - '2888'
+      - '3888'
+    restart: always
+    container_name: zookeeper2
+    networks:
+      - basic
+  
+  kafka0:
+    image: hyperledger/fabric-kafka
+    environment:
+      - KAFKA_MESSAGE_MAX_BYTES=103809024
+      - KAFKA_REPLICA_FETCH_MAX_BYTES=103809024
+      - KAFKA_UNCLEAN_LEADER_ELECTION_ENABLE=false
+      - KAFKA_BROKER_ID=0
+      - KAFKA_MIN_INSYNC_REPLICAS=2
+      - KAFKA_DEFAULT_REPLICATION_FACTOR=3
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper0:2181,zookeeper1:2181,zookeeper2:2181
+    ports:
+      - '9092'
+    restart: always
+    container_name: kafka0
+    depends_on:
+      - zookeeper0
+      - zookeeper1
+      - zookeeper2
+    networks:
+      - basic
+
+  kafka1:
+    image: hyperledger/fabric-kafka
+    environment:
+      - KAFKA_MESSAGE_MAX_BYTES=103809024
+      - KAFKA_REPLICA_FETCH_MAX_BYTES=103809024
+      - KAFKA_UNCLEAN_LEADER_ELECTION_ENABLE=false
+      - KAFKA_BROKER_ID=1
+      - KAFKA_MIN_INSYNC_REPLICAS=2
+      - KAFKA_DEFAULT_REPLICATION_FACTOR=3
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper0:2181,zookeeper1:2181,zookeeper2:2181
+    ports:
+      - '9092'
+    restart: always
+    container_name: kafka1
+    depends_on:
+      - zookeeper0
+      - zookeeper1
+      - zookeeper2
+    networks:
+      - basic
+  
+  kafka2:
+    image: hyperledger/fabric-kafka
+    environment:
+      - KAFKA_MESSAGE_MAX_BYTES=103809024
+      - KAFKA_REPLICA_FETCH_MAX_BYTES=103809024
+      - KAFKA_UNCLEAN_LEADER_ELECTION_ENABLE=false
+      - KAFKA_BROKER_ID=2
+      - KAFKA_MIN_INSYNC_REPLICAS=2
+      - KAFKA_DEFAULT_REPLICATION_FACTOR=3
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper0:2181,zookeeper1:2181,zookeeper2:2181
+    ports:
+      - '9092'
+    restart: always
+    container_name: kafka2
+    depends_on:
+      - zookeeper0
+      - zookeeper1
+      - zookeeper2
+    networks:
+      - basic
+  
+  kafka3:
+    image: hyperledger/fabric-kafka
+    environment:
+      - KAFKA_MESSAGE_MAX_BYTES=103809024
+      - KAFKA_REPLICA_FETCH_MAX_BYTES=103809024
+      - KAFKA_UNCLEAN_LEADER_ELECTION_ENABLE=false
+      - KAFKA_BROKER_ID=3
+      - KAFKA_MIN_INSYNC_REPLICAS=2
+      - KAFKA_DEFAULT_REPLICATION_FACTOR=3
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper0:2181,zookeeper1:2181,zookeeper2:2181
+    ports:
+      - '9092'
+    restart: always
+    container_name: kafka3
+    depends_on:
+      - zookeeper0
+      - zookeeper1
+      - zookeeper2
+    networks:
+      - basic
+  
+  orderer.trch.com:
+    container_name: orderer.trch.com
+    image: hyperledger/fabric-orderer
+    environment:
+      - ORDERER_GENERAL_LOGLEVEL=debug
+      - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+      - ORDERER_GENERAL_GENESISMETHOD=file
+      - ORDERER_GENERAL_GENESISFILE=/etc/hyperledger/configtx/genesis.block
+      - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
+      - ORDERER_GENERAL_LOCALMSPDIR=/etc/hyperledger/msp/orderer/msp
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/orderer
+    command: orderer
+    ports:
+      - 7050:7050
+    volumes:
+        - ./config/:/etc/hyperledger/configtx
+        - ./crypto-config/ordererOrganizations/trch.com/orderers/orderer.trch.com/:/etc/hyperledger/msp/orderer
+        - ./crypto-config/peerOrganizations/org1.trpw.com/peers/peer0.org1.trpw.com/:/etc/hyperledger/msp/peerOrg1
+        - ./crypto-config/peerOrganizations/org2.trpw.com/peers/peer0.org2.trpw.com/:/etc/hyperledger/msp/peerOrg2
+        - ./crypto-config/peerOrganizations/org3.trcr.com/peers/peer0.org3.trcr.com/:/etc/hyperledger/msp/peerOrg3
+        - ./crypto-config/peerOrganizations/org4.trcr.com/peers/peer0.org4.trcr.com/:/etc/hyperledger/msp/peerOrg4
+    depends_on:
+      - kafka0
+      - kafka1
+      - kafka2
+      - kafka3
+    networks:
+      - basic
+
+  peer0.org1.trpw.com:
+    container_name: peer0.org1.trpw.com
+    image: hyperledger/fabric-peer
+    environment:
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      - CORE_PEER_ID=peer0.org1.trpw.com
+      - CORE_LOGGING_PEER=debug
+      - CORE_CHAINCODE_LOGGING_LEVEL=DEBUG
+      - CORE_PEER_LOCALMSPID=Org1MSP
+      - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/peer/
+      - CORE_PEER_ADDRESS=peer0.org1.trpw.com:7051
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=multitradecheck_network_basic
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric
+    command: peer node start
+    ports:
+      - 7051:7051
+      - 7053:7053
+    volumes:
+        - /var/run/:/host/var/run/
+        - ./crypto-config/peerOrganizations/org1.trpw.com/peers/peer0.org1.trpw.com/msp:/etc/hyperledger/msp/peer
+        - ./crypto-config/peerOrganizations/org1.trpw.com/users:/etc/hyperledger/msp/users
+        - ./config:/etc/hyperledger/configtx
+    depends_on:
+      - orderer.trch.com
+    networks:
+      - basic
+
+  peer0.org2.trpw.com:
+    container_name: peer0.org2.trpw.com
+    image: hyperledger/fabric-peer
+    environment:
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      - CORE_PEER_ID=peer0.org2.trpw.com
+      - CORE_LOGGING_PEER=debug
+      - CORE_CHAINCODE_LOGGING_LEVEL=DEBUG
+      - CORE_PEER_LOCALMSPID=Org2MSP
+      - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/peer/
+      - CORE_PEER_ADDRESS=peer0.org2.trpw.com:7051
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=multitradecheck_network_basic
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric
+    command: peer node start
+    ports:
+      - 8051:7051
+      - 8053:7053
+    volumes:
+        - /var/run/:/host/var/run/
+        - ./crypto-config/peerOrganizations/org2.trpw.com/peers/peer0.org2.trpw.com/msp:/etc/hyperledger/msp/peer
+        - ./crypto-config/peerOrganizations/org2.trpw.com/users:/etc/hyperledger/msp/users
+        - ./config:/etc/hyperledger/configtx
+    depends_on:
+      - orderer.trch.com
+    networks:
+      - basic
+
+  peer0.org3.trcr.com:
+    container_name: peer0.org3.trcr.com
+    image: hyperledger/fabric-peer
+    environment:
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      - CORE_PEER_ID=peer0.org3.trcr.com
+      - CORE_LOGGING_PEER=debug
+      - CORE_CHAINCODE_LOGGING_LEVEL=DEBUG
+      - CORE_PEER_LOCALMSPID=Org3MSP
+      - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/peer/
+      - CORE_PEER_ADDRESS=peer0.org3.trcr.com:7051
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=multitradecheck_network_basic
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric
+    command: peer node start
+    ports:
+      - 9051:7051
+      - 9053:7053
+    volumes:
+        - /var/run/:/host/var/run/
+        - ./crypto-config/peerOrganizations/org3.trcr.com/peers/peer0.org3.trcr.com/msp:/etc/hyperledger/msp/peer
+        - ./crypto-config/peerOrganizations/org3.trcr.com/users:/etc/hyperledger/msp/users
+        - ./config:/etc/hyperledger/configtx
+    depends_on:
+      - orderer.trch.com
+    networks:
+      - basic
+  
+  peer0.org4.trcr.com:
+    container_name: peer0.org4.trcr.com
+    image: hyperledger/fabric-peer
+    environment:
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      - CORE_PEER_ID=peer0.org4.trcr.com
+      - CORE_LOGGING_PEER=debug
+      - CORE_CHAINCODE_LOGGING_LEVEL=DEBUG
+      - CORE_PEER_LOCALMSPID=Org4MSP
+      - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/peer/
+      - CORE_PEER_ADDRESS=peer0.org4.trcr.com:7051
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=multitradecheck_network_basic
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric
+    command: peer node start
+    ports:
+      - 10051:7051
+      - 10053:7053
+    volumes:
+        - /var/run/:/host/var/run/
+        - ./crypto-config/peerOrganizations/org4.trcr.com/peers/peer0.org4.trcr.com/msp:/etc/hyperledger/msp/peer
+        - ./crypto-config/peerOrganizations/org4.trcr.com/users:/etc/hyperledger/msp/users
+        - ./config:/etc/hyperledger/configtx
+    depends_on:
+      - orderer.trch.com
+    networks:
+      - basic
+  
+  cli:
+    container_name: cli
+    image: hyperledger/fabric-tools
+    tty: true
+    environment:
+      - GOPATH=/opt/gopath
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      - CORE_LOGGING_LEVEL=DEBUG
+      - CORE_PEER_ID=cli
+      - CORE_PEER_ADDRESS=peer0.org1.trpw.com:7051
+      - CORE_PEER_LOCALMSPID=Org1MSP
+      - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.trpw.com/users/Admin@org1.trpw.com/msp
+      - CORE_CHAINCODE_KEEPALIVE=10
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    command: /bin/bash
+    volumes:
+        - /var/run/:/host/var/run/
+        - ./../chaincode/:/opt/gopath/src/github.com/
+        - ./crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
+        - ./config:/opt/gopath/src/github.com/hyperledger/fabric/peer/config
+    depends_on:
+      - orderer.trch.com
+      - peer0.org1.trpw.com
+      - peer0.org2.trpw.com
+      - peer0.org3.trcr.com
+      - peer0.org4.trcr.com
+    networks:
+        - basic
